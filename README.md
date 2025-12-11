@@ -21,3 +21,5 @@ https://dotenvx.com/docs/install
 
 ### Notes
 - Install dotenvx beforehand (see official docs above).
+- For debugging in VS Code, you can point `envFile` to your plain `.env/{env}` during local runs.
+- Existing keys in `.env.{env}.enc` are not updated when their values change in plain `.env/{env}`. If you need to change a value, remove the key from the encrypted file and rerun `env_share/cmd/encryption.py`.
