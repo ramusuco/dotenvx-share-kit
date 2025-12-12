@@ -11,7 +11,10 @@ def main(target_env: str)-> None:
     enc_file, env_file, _, work_enc, key_file = prepare_paths(target_env)
     ensure_gitignore()
     created_new_enc = ensure_encrypted_file_exists(enc_file)
-    validate_files([key_file, enc_file, env_file])
+    if not created_new_enc:
+        validate_files([key_file, enc_file, env_file])
+    else:
+        validate_files([enc_file, env_file])
 
     try:
         if created_new_enc:

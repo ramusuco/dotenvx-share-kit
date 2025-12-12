@@ -2,7 +2,6 @@ import os
 
 ENVS = ["dev", "stg", "prd"]
 ENV_DIR = ".env"
-KEY_PATH = os.path.join(ENV_DIR, ".env.keys")
 GITIGNORE_PATH = ".gitignore"
 ENCRYPTED_PREFIX = "encrypted:"
 ENC_DIR = "env_share"
