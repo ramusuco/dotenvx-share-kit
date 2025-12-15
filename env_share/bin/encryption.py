@@ -2,8 +2,11 @@ import os
 import sys
 import shutil
 import logging
-from env_share.cmd.const import *
-from env_share.cmd.common import *
+from env_share.bin.config import *
+from env_share.bin.lib.paths import prepare_paths
+from env_share.bin.lib.dotenvx_runner import run_decrypt, run_encrypt
+from env_share.bin.lib.validation import ensure_encrypted_values, ensure_gitignore, validate_files
+from env_share.bin.lib.io_utils import load_env_file, load_enc_file, open_file, cleanup_tmp
 
 logger = logging.getLogger(__name__)
 

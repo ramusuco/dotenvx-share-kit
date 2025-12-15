@@ -24,25 +24,25 @@ You may use this repository freely, but it is provided "as is" without warranty;
 
 ### Encryption (first run)
 1. Prepare the plain env file (e.g. `.env/dev`, `.env/stg`).
-2. Run `env_share/cmd/encryption.py {env}` (first run creates the key and `env_share/.env.{env}.enc`).
+2. Run `env_share/bin/encryption.py {env}` (first run creates the key and `env_share/.env.{env}.enc`).
 3. Share `.env/keys/{env}.keys` securely with teammates (gitignored).
 
 ### Add new values (requires the key)
 1. Update the plain env file (e.g. `.env/dev`, `.env/stg`).
-2. Run `env_share/cmd/encryption.py {env}`.
+2. Run `env_share/bin/encryption.py {env}`.
 3. The new keys are added to `env_share/.env.{env}.enc`; commit/push as needed.
 
 ### Reset the encrypted file
 1. Delete `env_share/.env.{env}.enc` for that env.
-2. Run `env_share/cmd/encryption.py {env}` to regenerate `.enc` with the existing key.
+2. Run `env_share/bin/encryption.py {env}` to regenerate `.enc` with the existing key.
 
 ### Change existing values
 1. Remove the target key from `env_share/.env.{env}.enc`.
-2. Put the desired value in the plain `.env/{env}` and rerun `env_share/cmd/encryption.py`.
+2. Put the desired value in the plain `.env/{env}` and rerun `env_share/bin/encryption.py`.
 
 ### Decryption
 1. Place the key at `.env/keys/{env}.keys`.
-2. Run `env_share/cmd/decryption.py {env}`; output goes to `.env/latest/.env.{env}`.
+2. Run `env_share/bin/decryption.py {env}`; output goes to `.env/latest/.env.{env}`.
 
 ---
 
@@ -72,17 +72,17 @@ Python  : 3.11
 
 ### 暗号化（初回）
 1. 平文の env ファイルを用意（例: `.env/dev` や `.env/stg`）。
-2. `env_share/cmd/encryption.py {env}` を実行（初回の暗号化で鍵と `env_share/.env.{env}.enc` が作成されます）。
+2. `env_share/bin/encryption.py {env}` を実行（初回の暗号化で鍵と `env_share/.env.{env}.enc` が作成されます）。
 3. `.env/keys/{env}.keys` を安全な手段でチームに共有する（gitignore 済み）。
 
 ### 新規の値を追加する（鍵がある前提）
 1. 平文の env ファイルを更新する（例: `.env/dev` や `.env/stg`）。
-2. `env_share/cmd/encryption.py {env}` を実行する。
+2. `env_share/bin/encryption.py {env}` を実行する。
 3. `env_share/.env.{env}.enc` に値が追加されるので必要に応じて push する。
 
 ### 暗号化ファイルをリセットする
 1. 対象環境の `env_share/.env.{env}.enc` を削除する。
-2. `env_share/cmd/encryption.py {env}` を再実行する（既存の鍵で `.enc` を再生成します）。
+2. `env_share/bin/encryption.py {env}` を再実行する（既存の鍵で `.enc` を再生成します）。
 
 ### 既存の値を変える
 1. `env_share/.env.{env}.enc` から該当キーを削除する。
@@ -90,4 +90,4 @@ Python  : 3.11
 
 ### 復号化
 1. 対応する鍵を `.env/keys/{env}.keys` に置く。
-2. `env_share/cmd/decryption.py {env}` を実行すると、復号結果が `.env/latest/.env.{env}` に書き出される。
+2. `env_share/bin/decryption.py {env}` を実行すると、復号結果が `.env/latest/.env.{env}` に書き出される。

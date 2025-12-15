@@ -1,0 +1,53 @@
+import logging
+import os
+from env_share.bin.config import GITIGNORE_PATH, ENCRYPTED_PREFIX, GITIGNORE_REQUIRED
+from env_share.bin.lib.io_utils import open_file
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+
+def validate_files(files: list[str]) -> None:
+    for file_path in files:
+        file_existence_confirmation(file_path)
+
+
+def file_existence_confirmation(file_path: str) -> None:
+    if not os.path.isfile(file_path):
+        raise FileNotFoundError(f"File not found: {file_path}")
+    logger.info(f"File exists: {file_path}")
+
+
+def ensure_encrypted_values(enc_file: str) -> None:
+    with open_file(enc_file, "r") as f:
+        for line in f:
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            key, value = line.strip().split("=", 1)
+            if key.startswith("DOTENV_PUBLIC_KEY"):
+                continue
+            value = value.strip()
+            if len(value) >= 2 and value[0] == value[-1] and value[0] in {'"', "'"}:
+                value = value[1:-1]
+            if not value.startswith(ENCRYPTED_PREFIX):
+                raise RuntimeError(
+                    f"unencrypted value detected in {enc_file}: {line.strip()}"
+                )
+
+
+def ensure_gitignore() -> None:
+    required = GITIGNORE_REQUIRED
+    if not os.path.isfile(GITIGNORE_PATH):
+        raise FileNotFoundError(f".gitignore not found: {GITIGNORE_PATH}")
+
+    with open_file(GITIGNORE_PATH, "r") as f:
+        lines = [line.strip() for line in f if line.strip()]
+    norm_lines = {line.rstrip("/") for line in lines}
+
+    missing = []
+    for entry in required:
+        if entry.rstrip("/") not in norm_lines:
+            missing.append(entry)
+
+    if missing:
+        raise RuntimeError(f".gitignore lacks entries: {', '.join(missing)}")
