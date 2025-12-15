@@ -1,5 +1,6 @@
 .env/*
 tmp/env_share/*
-.env.keys
+tmp/*
+*.keys
 __pycache__
 *.pyc
