@@ -11,7 +11,7 @@ from env_share.cmd.const import (
     KEYS_DIR,
     LATEST_DIR
 )
-
+from typing import TextIO
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -34,7 +34,10 @@ load_env_file = load_kv_file
 load_enc_file = load_kv_file
 
 
-def run_decrypt(enc_file: str, key_path: str) -> None:
+def run_decrypt(
+    enc_file: str,
+    key_path: str
+) -> None:
     try:
         subprocess.run(
             ["dotenvx", "decrypt", "-fk", key_path, "-f", enc_file],
@@ -49,7 +52,10 @@ def run_decrypt(enc_file: str, key_path: str) -> None:
         raise
 
 
-def run_encrypt(plain_file: str, key_path: str) -> None:
+def run_encrypt(
+        plain_file: str,
+        key_path: str
+) -> None:
     try:
         subprocess.run(
             ["dotenvx", "encrypt", "-fk", key_path, "-f", plain_file],
@@ -75,7 +81,7 @@ def file_existence_confirmation(file_path: str) -> None:
     logger.info(f"File exists: {file_path}")
 
 
-def cleanup_tmp(paths) -> None:
+def cleanup_tmp(paths: list[str]) -> None:
     for file_path in paths:
         if os.path.isfile(file_path):
             os.remove(file_path)
@@ -86,7 +92,7 @@ def ensure_dirs(dirs) -> None:
         os.makedirs(d, exist_ok=True)
 
 
-def prepare_paths(target_env: str):
+def prepare_paths(target_env: str) -> tuple[str, str, str, str, str]:
     ensure_dirs([ENV_DIR, WORK_DIR, LATEST_DIR, ENC_DIR, KEYS_DIR])
     key_file = os.path.join(KEYS_DIR, f"{target_env}.keys")
     enc_file = os.path.join(ENC_DIR, f".env.{target_env}.enc")
@@ -108,7 +114,8 @@ def ensure_encrypted_values(enc_file: str) -> None:
             if len(value) >= 2 and value[0] == value[-1] and value[0] in {'"', "'"}:
                 value = value[1:-1]
             if not value.startswith(ENCRYPTED_PREFIX):
-                raise RuntimeError(f"unencrypted value detected in {enc_file}: {line.strip()}")
+                raise RuntimeError(
+                    f"unencrypted value detected in {enc_file}: {line.strip()}")
 
 
 def ensure_gitignore() -> None:
@@ -128,10 +135,11 @@ def ensure_gitignore() -> None:
     if missing:
         raise RuntimeError(f".gitignore lacks entries: {', '.join(missing)}")
 
+
 def open_file(
-        path, 
-        mode,
-    ):
+    path: str,
+    mode: str,
+) -> TextIO:
     if mode == 'w':
         return open(path, mode, encoding="utf-8", newline="")
     return open(path, mode, encoding="utf-8")
