@@ -73,7 +73,7 @@ def add_data_to_plain_file(
     with open_file(plain_file, 'a') as f:
         for key, value in add_data.items():
             f.write(f"{key}={value}\n")
-            logger.info(f"【NEW KEY】: {key}")
+            logger.info(f"Added new key: {key}")
 
 
 def ensure_encrypted_file_exists(enc_file: str) -> bool:
