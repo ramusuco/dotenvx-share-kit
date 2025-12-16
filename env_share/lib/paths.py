@@ -1,6 +1,6 @@
 import os
-from env_share.bin.config import ENV_DIR, ENC_DIR, WORK_DIR, KEYS_DIR, LATEST_DIR
-from env_share.bin.lib.io_utils import ensure_dirs
+from env_share.config import ENV_DIR, ENC_DIR, WORK_DIR, KEYS_DIR, LATEST_DIR
+from env_share.lib.io_utils import ensure_dirs
 
 
 def prepare_paths(target_env: str) -> tuple[str, str, str, str, str]:
