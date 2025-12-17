@@ -1,12 +1,12 @@
-## Official
+## dotenvx Official Documentation
 https://dotenvx.com/docs/install
 
-## Requirements
-- dotenvx 1.51.1
-- Python 3.11
+## Tested Environment
+- dotenvx: 1.51.1
+- Python: 3.11
 
 ## Disclaimer
-You may use this repository freely, but it comes with no warranty; use at your own risk.
+This repository is provided as-is. No warranty is provided; use at your own risk.
 
 ## Purpose
 1. Use dotenvx more securely.
@@ -14,42 +14,42 @@ You may use this repository freely, but it comes with no warranty; use at your o
 3. Ensure stable operation.
 4. Use Python to minimize OS/environment differences.
 
-## Design philosophy
-- The goal is to safely share the latest env file and never overwrite your local plain `.env/{env}`.
+## Design Philosophy
+- This repo focuses only on safely sharing the latest env file; it never overwrites your local plain `.env/{env}`.
 - By default, we only add new keys; existing keys in `.enc` are not overwritten. To change a value, delete the key from `.enc` and rerun encryption to add it back as a new key.
 - Decryption writes to `.env/latest/.env.{env}` and does not overwrite your plain `.env/{env}`.
-- Resetting is explicit: delete the `.enc` file manually and rerun encryption to regenerate it.
+- Reset is explicit: delete the target `.enc` file manually, then rerun encryption to regenerate it with the existing key.
 
 ## Usage
 
 ### Encryption (first run)
 1. Prepare the plain env file (e.g. `.env/dev`, `.env/stg`).
-2. Run `env_share/bin/encryption.py {env}` (first run creates the key and `env_share/.env.{env}.enc`).
-3. Share `.env/keys/{env}.keys` securely with teammates (gitignored).
+2. Run `env_share/bin/encryption.py {env}` (on the first run, this creates the key and `env_share/.env.{env}.enc`).
+3. Share `.env/keys/{env}.keys` securely with your team (gitignored).
 
 ### Add new values (requires the key)
 1. Update the plain env file (e.g. `.env/dev`, `.env/stg`).
 2. Run `env_share/bin/encryption.py {env}`.
-3. The new keys are added to `env_share/.env.{env}.enc`; commit/push as needed.
+3. New keys are appended to `env_share/.env.{env}.enc`; commit/push as needed.
 
 ### Reset the encrypted file
-1. Delete `env_share/.env.{env}.enc` for that env.
-2. Run `env_share/bin/encryption.py {env}` to regenerate `.enc` with the existing key.
+1. Delete `env_share/.env.{env}.enc` for the target env.
+2. Run `env_share/bin/encryption.py {env}` again to regenerate `.enc` with the existing key.
 
 ### Change existing values
 1. Remove the target key from `env_share/.env.{env}.enc`.
-2. Put the desired value in the plain `.env/{env}` and rerun `env_share/bin/encryption.py`.
+2. Put the desired value in the plain `.env/{env}` and rerun `env_share/bin/encryption.py {env}`.
 
 ### Decryption
 1. Place the key at `.env/keys/{env}.keys`.
-2. Run `env_share/bin/decryption.py {env}`; output goes to `.env/latest/.env.{env}`.
+2. Run `env_share/bin/decryption.py {env}`; decrypted output is written to `.env/latest/.env.{env}`.
 
 ---
 
-## 公式ドキュメント
+## dotenvxの公式ドキュメント
 https://dotenvx.com/docs/install
 
-## 動作環境
+## 動作確認した環境
 dotenvx : 1.51.1
 Python  : 3.11
 
