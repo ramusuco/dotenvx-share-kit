@@ -1,6 +1,6 @@
 import logging
 import os
-from env_share.config import GITIGNORE_PATH, ENCRYPTED_PREFIX, GITIGNORE_REQUIRED
+from env_share.config import GITIGNORE_PATH, ENCRYPTED_PREFIX, GITIGNORE_REQUIRED, ENVS
 from env_share.lib.io_utils import open_file
 
 logging.basicConfig(level=logging.INFO)
@@ -51,3 +51,13 @@ def ensure_gitignore() -> None:
 
     if missing:
         raise RuntimeError(f".gitignore lacks entries: {', '.join(missing)}")
+
+
+def validate_environment(env: str) -> None:
+    if not env:
+        raise ValueError("Environment is not set")
+    if len(env.split("/")) > 2 or len(env.split("\\")):
+        raise ValueError("Environment format is invalid")
+    if env.strip() not in ENVS:
+        raise ValueError(
+            f"Environment '{env}' is not recognized. Valid environments: {', '.join(ENVS)}")
