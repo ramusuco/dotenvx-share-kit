@@ -24,7 +24,7 @@ def ensure_encrypted_values(enc_file: str) -> None:
             if not line or line.startswith("#") or "=" not in line:
                 continue
             key, value = line.strip().split("=", 1)
-            if key.startswith("DOTENV_PUBLIC_KEY"):
+            if key.startswith("DOTENV_"):
                 continue
             value = value.strip()
             if len(value) >= 2 and value[0] == value[-1] and value[0] in {'"', "'"}:
@@ -54,10 +54,11 @@ def ensure_gitignore() -> None:
 
 
 def validate_environment(env: str) -> None:
+    env = env.strip()
     if not env:
         raise ValueError("Environment is not set")
-    if len(env.split("/")) > 2 or len(env.split("\\")):
+    if "/" in env or "\\" in env:
         raise ValueError("Environment format is invalid")
-    if env.strip() not in ENVS:
+    if env not in ENVS:
         raise ValueError(
             f"Environment '{env}' is not recognized. Valid environments: {', '.join(ENVS)}")

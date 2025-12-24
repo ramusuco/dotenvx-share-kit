@@ -41,18 +41,20 @@ def write_without_header(
         started = False
         for line in src:
             stripped = line.strip()
+            if not stripped or stripped.startswith('#'):
+                if started:
+                    out.write(line)
+                continue
+            if '=' not in line:
+                if started:
+                    out.write(line)
+                continue
+            key, _ = stripped.split('=', 1)
+            if key.strip().startswith('DOTENV_'):
+                continue
             if not started:
-                if not stripped or stripped.startswith('#'):
-                    continue
-                if '=' not in line:
-                    continue
-                key, _ = stripped.split('=', 1)
-                if key.startswith('DOTENV_'):
-                    continue
                 started = True
-                out.write(line)
-            else:
-                out.write(line)
+            out.write(line)
 
 
 if __name__ == "__main__":
