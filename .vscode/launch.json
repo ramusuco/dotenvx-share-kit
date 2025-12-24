@@ -12,5 +12,27 @@
                 "PYTHONPATH": "${workspaceFolder}"
             }
         },
+        {
+            "name": "decryption",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "env_share/bin/decryption.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}"
+            }
+        },
+        {
+            "name": "encryption",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "env_share/bin/encryption.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}"
+            }
+        },
     ]
 }
