@@ -28,6 +28,7 @@ def main(target_env: str) -> None:
         shutil.copy(enc_file, work_enc_file)
 
         run_decrypt(work_enc_file, key_file)
+        logger.info("Decrypted existing encrypted env file.")
         write_without_header(work_enc_file, env_latest_file)
         logger.info(f"wrote {env_latest_file}")
     finally:

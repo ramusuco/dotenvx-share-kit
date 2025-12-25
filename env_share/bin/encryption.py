@@ -43,6 +43,7 @@ def main(target_env: str) -> None:
             return
 
         run_encrypt(work_enc, key_file)
+        logger.info("encrypted env file.")
         ensure_encrypted_values(work_enc)
 
         shutil.move(work_enc, enc_file)
