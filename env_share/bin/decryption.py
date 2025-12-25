@@ -1,5 +1,6 @@
 import shutil
 import logging
+import sys
 from env_share.config import *
 from env_share.lib.paths import prepare_paths
 from env_share.lib.dotenvx_runner import run_decrypt
@@ -10,6 +11,7 @@ logger = logging.getLogger(__name__)
 
 
 def main(target_env: str) -> None:
+    logger.info(f"Extracting latest env for target environment: {target_env}")
     validate_environment(target_env)
     (
         enc_file,
@@ -30,6 +32,7 @@ def main(target_env: str) -> None:
         logger.info(f"wrote {env_latest_file}")
     finally:
         cleanup_tmp([work_enc_file])
+        logger.info("Cleaned up temporary files.")
         ensure_encrypted_values(enc_file)
 
 
@@ -58,4 +61,6 @@ def write_without_header(
 
 
 if __name__ == "__main__":
+    if len(sys.argv) > 1:
+        main(sys.argv[1])
     main(input("please enter target env: "))

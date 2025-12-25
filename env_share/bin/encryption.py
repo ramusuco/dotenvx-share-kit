@@ -1,4 +1,5 @@
 import os
+import sys
 import shutil
 import logging
 from env_share.config import *
@@ -11,6 +12,7 @@ logger = logging.getLogger(__name__)
 
 
 def main(target_env: str) -> None:
+    logger.info(f"Extracting latest env for target environment: {target_env}")
     validate_environment(target_env)
     (
         enc_file,
@@ -48,6 +50,7 @@ def main(target_env: str) -> None:
 
     finally:
         cleanup_tmp([work_enc])
+        logger.info("Cleaned up temporary files.")
         ensure_encrypted_values(enc_file)
 
 
@@ -89,4 +92,6 @@ def ensure_encrypted_file_exists(enc_file: str) -> bool:
 
 
 if __name__ == "__main__":
+    if len(sys.argv) > 1:
+        main(sys.argv[1])
     main(input("please enter target env: "))
