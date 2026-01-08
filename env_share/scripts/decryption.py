@@ -1,7 +1,6 @@
 import shutil
 import logging
 import sys
-from env_share.config import *
 from env_share.lib.paths import prepare_paths
 from env_share.lib.dotenvx_runner import run_decrypt
 from env_share.lib.validation import validate_files, ensure_gitignore, ensure_encrypted_values, validate_environment
