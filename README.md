@@ -1,34 +1,35 @@
 # dotenvx-share-kit
 
-Git サブモジュールとして組み込み、チームで `.env` を安全に共有するためのツールキット。
+A toolkit for securely sharing `.env` files across your team using Git submodules and dotenvx encryption.
 
-## 特徴
+## Features
 
-- **サブモジュールとして動作** - 親プロジェクトに組み込んで使用
-- **VS Code launch.json から実行** - デバッグ設定で簡単に暗号化/復号化
-- **暗号化ファイルは親プロジェクト側に生成** - サブモジュール内は常にクリーン
-- **平文を上書きしない** - 個人の `.env/{env}` は安全
+- **Git Submodule** - Embed into any project without polluting your codebase
+- **VS Code Integration** - Run encryption/decryption from launch.json
+- **Clean Separation** - Encrypted files live in parent project, not in submodule
+- **Non-destructive** - Never overwrites your local plaintext `.env` files
 
-## 動作確認環境
+## Requirements
 
-- dotenvx: 1.51.1
-- Python: 3.11
+- Python 3.11+
+- [dotenvx](https://dotenvx.com/docs/install) 1.51.1+
 
-## セットアップ
+## Installation
 
-### 1. サブモジュールとして追加
+### 1. Add as submodule
 
 ```bash
 git submodule add https://github.com/yourname/dotenvx-share-kit.git env_share
 ```
 
-### 2. launch.json を親プロジェクトにコピー
+### 2. Copy launch.json
 
 ```bash
+mkdir -p .vscode
 cp env_share/.vscode/launch.json .vscode/
 ```
 
-または既存の launch.json に以下を追加:
+Or add to your existing `.vscode/launch.json`:
 
 ```json
 {
@@ -55,69 +56,62 @@ cp env_share/.vscode/launch.json .vscode/
 }
 ```
 
-### 3. dotenvx をインストール
-
-https://dotenvx.com/docs/install
-
-## ディレクトリ構造
+## Directory Structure
 
 ```
 your-project/
 ├── .vscode/
 │   └── launch.json
 ├── .env/
-│   ├── dev                          # 平文 (gitignore)
+│   ├── dev                      # plaintext (gitignored)
 │   ├── stg
-│   ├── encrypted/                   # 暗号化ファイル (git管理)
+│   ├── encrypted/               # encrypted files (tracked)
 │   │   ├── .env.dev.enc
 │   │   └── .env.stg.enc
-│   ├── keys/                        # 鍵ファイル (gitignore)
+│   ├── keys/                    # key files (gitignored)
 │   │   └── dev.keys
-│   └── latest/                      # 復号結果 (gitignore)
+│   └── latest/                  # decrypted output (gitignored)
 │       └── .env.dev
-└── env_share/                       # このサブモジュール
-    ├── scripts/
-    │   ├── encryption.py
-    │   └── decryption.py
-    └── ...
+└── env_share/                   # this submodule
 ```
 
-## 使い方
+## Usage
 
-### 暗号化（初回）
+### Encrypt (first time)
 
-1. 平文ファイルを用意: `.env/dev`
-2. VS Code で `encrypt` を実行（または `python env_share/scripts/encryption.py dev`）
-3. 初回実行で `.env/keys/dev.keys` と `.env/encrypted/.env.dev.enc` が生成
-4. `.keys` ファイルを安全な手段でチームに共有
+1. Create plaintext file: `.env/dev`
+2. Run `encrypt` in VS Code (or `python env_share/scripts/encryption.py dev`)
+3. Share `.env/keys/dev.keys` with your team securely
+4. Commit `.env/encrypted/.env.dev.enc`
 
-### 新規キーの追加
+### Add new keys
 
-1. 平文 `.env/dev` に新しいキーを追加
-2. `encrypt` を実行
-3. `.env/encrypted/.env.dev.enc` に追記される → commit/push
+1. Add keys to `.env/dev`
+2. Run `encrypt`
+3. Commit updated `.env/encrypted/.env.dev.enc`
 
-### 既存の値を変更
+### Change existing values
 
-1. `.env/encrypted/.env.dev.enc` から該当キーを削除
-2. 平文に新しい値を入れて `encrypt` を実行
+1. Remove the key from `.env/encrypted/.env.dev.enc`
+2. Update value in `.env/dev`
+3. Run `encrypt`
 
-### 復号化
+### Decrypt
 
-1. `.env/keys/dev.keys` を配置
-2. `decrypt` を実行
-3. `.env/latest/.env.dev` に出力される
+1. Place key file at `.env/keys/dev.keys`
+2. Run `decrypt`
+3. Output written to `.env/latest/.env.dev`
 
-## 設計思想
+## Design Principles
 
-- **追加のみ、上書きなし** - 既存キーは自動上書きしない
-- **平文は触らない** - 復号結果は `latest/` に出力
-- **リセットは明示的** - `.enc` を手動削除して再生成
+- **Append-only** - Existing keys in `.enc` are never auto-overwritten
+- **Non-destructive** - Decryption outputs to `latest/`, not your working `.env`
+- **Explicit reset** - Delete `.enc` manually to regenerate
 
-## 免責事項
+## Disclaimer
 
 This repository is provided as-is. No warranty is provided; use at your own risk.
 
-## 参考
+## References
 
-- [dotenvx 公式ドキュメント](https://dotenvx.com/docs/install)
+- [dotenvx Documentation](https://dotenvx.com/docs/install)
