@@ -1,0 +1,10 @@
+[project]
+name = "dotenvx-share-kit"
+version = "0.1.0"
+description = "A toolkit for securely sharing .env files using dotenvx encryption"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.optional-dependencies]
+dev = []
