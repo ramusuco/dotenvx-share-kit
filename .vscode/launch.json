@@ -16,7 +16,7 @@
             "name": "decryption",
             "type": "debugpy",
             "request": "launch",
-            "program": "env_share/bin/decryption.py",
+            "program": "env_share/scripts/decryption.py",
             "console": "integratedTerminal",
             "cwd": "${workspaceFolder}",
             "env": {
@@ -27,7 +27,7 @@
             "name": "encryption",
             "type": "debugpy",
             "request": "launch",
-            "program": "env_share/bin/encryption.py",
+            "program": "env_share/scripts/encryption.py",
             "console": "integratedTerminal",
             "cwd": "${workspaceFolder}",
             "env": {

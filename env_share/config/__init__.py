@@ -8,7 +8,7 @@ LATEST_DIR = os.path.join(ENV_DIR, "latest")
 KEYS_DIR = os.path.join(ENV_DIR, "keys")
 GITIGNORE_PATH = ".gitignore"
 ENCRYPTED_PREFIX = "encrypted:"
-ENC_DIR = os.path.join(PROJECT_NAME, "encrypted")
+ENC_DIR = os.path.join(ENV_DIR, "encrypted")
 TMP_DIR = "tmp"
 WORK_DIR = os.path.join(TMP_DIR, PROJECT_NAME)
 
