@@ -64,4 +64,5 @@ def write_without_header(
 if __name__ == "__main__":
     if len(sys.argv) > 1:
         main(sys.argv[1])
-    main(input("please enter target env: "))
+    else:
+        main(input("please enter target env: "))
