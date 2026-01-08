@@ -12,28 +12,22 @@ logger = logging.getLogger(__name__)
 def main(target_env: str) -> None:
     logger.info(f"Extracting latest env for target environment: {target_env}")
     validate_environment(target_env)
-    (
-        enc_file,
-        _,
-        env_latest_file,
-        work_enc_file,
-        key_file
-    ) = prepare_paths(target_env)
+    paths = prepare_paths(target_env)
 
     ensure_gitignore()
-    validate_files([key_file, enc_file])
+    validate_files([paths.key, paths.enc])
 
     try:
-        shutil.copy(enc_file, work_enc_file)
+        shutil.copy(paths.enc, paths.work)
 
-        run_decrypt(work_enc_file, key_file)
+        run_decrypt(paths.work, paths.key)
         logger.info("Decrypted existing encrypted env file.")
-        write_without_header(work_enc_file, env_latest_file)
-        logger.info(f"wrote {env_latest_file}")
+        write_without_header(paths.work, paths.latest)
+        logger.info(f"wrote {paths.latest}")
     finally:
-        cleanup_tmp([work_enc_file])
+        cleanup_tmp([paths.work])
         logger.info("Cleaned up temporary files.")
-        ensure_encrypted_values(enc_file)
+        ensure_encrypted_values(paths.enc)
 
 
 def write_without_header(

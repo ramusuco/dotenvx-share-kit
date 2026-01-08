@@ -1,13 +1,24 @@
 import os
+from dataclasses import dataclass
 from env_share.config import ENV_DIR, ENC_DIR, WORK_DIR, KEYS_DIR, LATEST_DIR
 from env_share.lib.io_utils import ensure_dirs
 
 
-def prepare_paths(target_env: str) -> tuple[str, str, str, str, str]:
+@dataclass(frozen=True)
+class EnvPaths:
+    enc: str
+    plain: str
+    latest: str
+    work: str
+    key: str
+
+
+def prepare_paths(target_env: str) -> EnvPaths:
     ensure_dirs([ENV_DIR, WORK_DIR, LATEST_DIR, ENC_DIR, KEYS_DIR])
-    key_file = os.path.join(KEYS_DIR, f"{target_env}.keys")
-    enc_file = os.path.join(ENC_DIR, f".env.{target_env}.enc")
-    env_plain_file = os.path.join(ENV_DIR, target_env)
-    env_latest_file = os.path.join(LATEST_DIR, f".env.{target_env}")
-    work_enc_file = os.path.join(WORK_DIR, f".env.{target_env}.enc")
-    return enc_file, env_plain_file, env_latest_file, work_enc_file, key_file
+    return EnvPaths(
+        enc=os.path.join(ENC_DIR, f".env.{target_env}.enc"),
+        plain=os.path.join(ENV_DIR, target_env),
+        latest=os.path.join(LATEST_DIR, f".env.{target_env}"),
+        work=os.path.join(WORK_DIR, f".env.{target_env}.enc"),
+        key=os.path.join(KEYS_DIR, f"{target_env}.keys"),
+    )
