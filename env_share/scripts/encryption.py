@@ -13,45 +13,39 @@ logger = logging.getLogger(__name__)
 def main(target_env: str) -> None:
     logger.info(f"Extracting latest env for target environment: {target_env}")
     validate_environment(target_env)
-    (
-        enc_file,
-        env_file,
-        _,
-        work_enc,
-        key_file,
-    ) = prepare_paths(target_env)
+    paths = prepare_paths(target_env)
 
     ensure_gitignore()
-    created_new_enc = ensure_encrypted_file_exists(enc_file)
+    created_new_enc = ensure_encrypted_file_exists(paths.enc)
 
     if not created_new_enc:
-        validate_files([key_file, enc_file, env_file])
+        validate_files([paths.key, paths.enc, paths.plain])
     else:
-        validate_files([enc_file, env_file])
+        validate_files([paths.enc, paths.plain])
 
     try:
         if created_new_enc:
-            shutil.copy(env_file, work_enc)
+            shutil.copy(paths.plain, paths.work)
         else:
-            shutil.copy(enc_file, work_enc)
-            run_decrypt(work_enc, key_file)
+            shutil.copy(paths.enc, paths.work)
+            run_decrypt(paths.work, paths.key)
 
-        updated = True if created_new_enc else embed_difference(env_file, work_enc)
+        updated = True if created_new_enc else embed_difference(paths.plain, paths.work)
         if not updated:
             logger.info("No missing keys. Skipped re-encrypt.")
             return
 
-        run_encrypt(work_enc, key_file)
+        run_encrypt(paths.work, paths.key)
         logger.info("encrypted env file.")
-        ensure_encrypted_values(work_enc)
+        ensure_encrypted_values(paths.work)
 
-        shutil.move(work_enc, enc_file)
+        shutil.move(paths.work, paths.enc)
         logger.info("Updated encrypted env file.")
 
     finally:
-        cleanup_tmp([work_enc])
+        cleanup_tmp([paths.work])
         logger.info("Cleaned up temporary files.")
-        ensure_encrypted_values(enc_file)
+        ensure_encrypted_values(paths.enc)
 
 
 def embed_difference(
