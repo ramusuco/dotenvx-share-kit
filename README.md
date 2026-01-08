@@ -16,17 +16,18 @@ A toolkit for securely sharing `.env` files across your team using Git submodule
 
 ## Installation
 
-### 1. Add as submodule
+### 1. Clone to your repository root
 
 ```bash
-git submodule add https://github.com/yourname/dotenvx-share-kit.git env_share
+git clone https://github.com/yourname/dotenvx-share-kit.git env_share
+rm -rf env_share/.git
 ```
 
-### 2. Copy launch.json
+### 2. Copy sample launch.json to your repository root
 
 ```bash
 mkdir -p .vscode
-cp env_share/.vscode/launch.json .vscode/
+cp env_share/.vscode/launch.json.example .vscode/launch.json
 ```
 
 Or add to your existing `.vscode/launch.json`:
