@@ -3,7 +3,6 @@ import os
 from env_share.config import GITIGNORE_PATH, ENCRYPTED_PREFIX, GITIGNORE_REQUIRED, ENVS
 from env_share.lib.io_utils import open_file
 
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 

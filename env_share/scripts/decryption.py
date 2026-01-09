@@ -55,6 +55,7 @@ def write_without_header(
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO)
     if len(sys.argv) > 1:
         main(sys.argv[1])
     else:
